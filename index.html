@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Fluency Sprint 30 — WordPress YouTuber</title>
+  <meta name="description" content="30-day speaking fluency sprint for a WordPress developer YouTuber: daily tongue twisters, vocabulary, phrase packs, drills."/>
+  <style>
+    /* ------- CSS Reset (light) ------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height: 1.55; letter-spacing: 0.2px; }
+    img, svg, video { display: block; max-width: 100%; }
+
+    :root {
+      --bg: #0b0f1a;                 /* deep navy */
+      --bg2: #101729;                /* dark blue */
+      --glass: rgba(255,255,255,0.08);
+      --card: rgba(255,255,255,0.10);
+      --stroke: rgba(255,255,255,0.18);
+      --text: #eef2ff;               /* soft white */
+      --muted: #a7b3d1;              /* slate */
+      --brand: #3A26C0;              /* AuthLab accent */
+      --accent: #25d0ff;             /* cyan */
+      --ok: #21d17c;                 /* green */
+      --warn: #ffb020;               /* amber */
+      --danger: #ff4d6d;             /* pink/red */
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f7f8fc; --bg2: #eef1fb; --glass: rgba(255,255,255,0.65); --card: rgba(255,255,255,0.75);
+        --stroke: rgba(12,16,40,0.08); --text: #0b0f1a; --muted: #445173; --accent: #0077ff;
+      }
+      body { color: var(--text); }
+    }
+
+    /* ------- Background ------- */
+    .bg {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(58,38,192,.35), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(37,208,255,.25), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      filter: saturate(1.1);
+    }
+
+    /* ------- Layout ------- */
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(1.4) blur(10px);
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0)) ;
+      border-bottom: 1px solid var(--stroke);
+    }
+    .wrap { display: grid; grid-template-columns: 280px 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 18px; }
+    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } }
+
+    .brandbar { display:flex; align-items:center; gap:14px; padding: 14px 18px; }
+    .logo {
+      width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--brand), var(--accent));
+      box-shadow: var(--shadow);
+    }
+    .title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: .4px; }
+    .muted { color: var(--muted); font-size: 13px; }
+
+    /* ------- Sidebar ------- */
+    nav.sidebar {
+      position: sticky; top: 68px; align-self: start; border-radius: var(--radius);
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px) saturate(1.4);
+      box-shadow: var(--shadow);
+      padding: 14px; max-height: calc(100dvh - 88px); overflow: auto;
+    }
+    .progress {
+      height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow:hidden; margin: 10px 0 12px;
+    }
+    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--accent)); transition: width .3s ease; }
+    .toc { list-style:none; padding:0; margin:0; display:grid; gap:6px; }
+    .toc li { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .toc a { display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; text-decoration:none; color:var(--text);
+             background: transparent; border:1px solid transparent; transition: .2s ease; flex:1; }
+    .toc a:hover { border-color: var(--stroke); background: var(--card); }
+    .toc .state { font-size: 11px; color: var(--muted); }
+    .toc .done { color: var(--ok); }
+
+    .search { display:flex; gap:8px; margin: 6px 0 10px; }
+    .input {
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke); background: var(--card);
+      color: var(--text); outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    /* ------- Main ------- */
+    main { display:grid; gap: 18px; }
+    .card {
+      background: var(--glass); border: 1px solid var(--stroke); border-radius: var(--radius);
+      backdrop-filter: blur(18px) saturate(1.4); box-shadow: var(--shadow); padding: 18px;
+    }
+    .card h2 { margin:0 0 8px; font-size: 24px; letter-spacing:.3px; }
+    .card h3 { margin:10px 0 6px; font-size: 16px; color: var(--muted); }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); font-size:12px; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; }
+    button, .btn {
+      appearance:none; border:1px solid var(--stroke); background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      color: var(--text); border-radius: 12px; padding:8px 12px; font-weight:600; cursor:pointer; box-shadow: var(--shadow);
+    }
+    button:hover { filter: brightness(1.05); }
+    .btn-primary { border-color: transparent; background: linear-gradient(135deg, var(--brand), var(--accent)); color: white; }
+
+    ul.clean { padding-left: 1.2rem; margin: .2rem 0 .6rem; }
+    ul.clean li { margin: .2rem 0; }
+    .grid-2 { display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .ghost { opacity:.75 }
+    .small { font-size: 12px; }
+
+    /* Print friendly */
+    @media print {
+      nav.sidebar { display:none; }
+      header { position: static; background: transparent; border: 0; }
+      body { background: white; color: black; }
+      .bg { display:none; }
+      .wrap { grid-template-columns: 1fr; padding: 0; }
+      .card { box-shadow: none; backdrop-filter: none; border: 1px solid #ddd; }
+      .btn, button { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <header role="banner">
+    <div class="brandbar wrap" style="padding-top: 10px; padding-bottom: 10px;">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div class="title">Fluency Sprint 30</div>
+        <div class="muted">WordPress developer • tutorials • marketing • podcast</div>
+      </div>
+      <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+        <button id="toggleNav" class="btn" aria-expanded="false" aria-controls="sidebar">Menu</button>
+        <button id="printBtn" class="btn">Print Chapter</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar" aria-label="Chapters">
+      <div class="pill" style="justify-content:space-between; width:100%;">
+        <span>Progress</span>
+        <span class="small" id="progressLabel">0%</span>
+      </div>
+      <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+      <div class="search" role="search">
+        <input id="search" class="input" placeholder="Search chapters… (vocab, phrases)"/>
+      </div>
+      <ul id="toc" class="toc" role="list"></ul>
+      <div class="small muted" style="margin-top:10px;">Tip: Use J / K to switch chapters. Press D to toggle done.</div>
+    </nav>
+
+    <!-- Main -->
+    <main id="main" role="main" aria-live="polite"></main>
+  </div>
+
+  <script>
+    // ---------- Data Pools (compact) ----------
+    const twisters = [
+      "Red lorry, yellow lorry.",
+      "A proper copper coffee pot.",
+      "Unique New York.",
+      "We surely shall see the sun shine soon.",
+      "Crisp crusts crackle and crunch.",
+      "Peter Piper picked a peck of pickled peppers.",
+      "She sells seashells by the seashore.",
+      "Toy boat, toy boat, toy boat.",
+      "Black bug bit a big black bear.",
+      "Six sleek swans swam swiftly southwards.",
+      "The sixth sick sheik’s sixth sheep’s sick.",
+      "Lesser leather never weathered wetter weather better.",
+      "Green glass globes glow greenly.",
+      "Thirty three thieves thought they thrilled the throne on Thursday.",
+      "This feather is thicker than that feather.",
+      "Five very vivid velvet vases vibrate.",
+      "Four fine fresh fish for you.",
+      "I kept a crisp compact script.",
+      "Truly rural railway.",
+      "Rolling red lorries really roll.",
+      "Six shy sheep shook softly.",
+      "Quickly compare hooks and filters with a concrete case.",
+      "Cache cleared, config checked, connection confirmed.",
+      "Press the build button, push the branch, and roll back the bug.",
+      "Toggle the theme, tweak the tokens, then test the template.",
+      "Click the clean clone and commit the changes clearly."
+    ];
+
+    const devTopics = [
+      "customizing a Kadence theme","building a child theme","configuring WooCommerce",
+      "setting up LocalWP","migrating a site from localhost to Hostinger",
+      "connecting a Namecheap domain to Cloudflare DNS","installing a free SSL certificate",
+      "tuning LiteSpeed Cache","optimizing Core Web Vitals","creating a staging site",
+      "hardening WordPress security","setting up SMTP with WP Mail SMTP",
+      "creating a clean permalink structure","adding WebP image optimization",
+      "setting up automatic backups with UpdraftPlus","creating a custom header and footer",
+      "fixing mixed content after SSL","deploying to Vercel via headless WordPress",
+      "configuring Rank Math SEO","setting up a contact form with Fluent Forms"
+    ];
+
+    const steps = [
+      "connect the domain","install WordPress","import the starter template",
+      "create the child theme","customize the header","configure the theme options",
+      "set up WooCommerce","add secure checkout","install SSL","force HTTPS",
+      "optimize images","defer non critical JavaScript","set up caching",
+      "prepare a staging site","test all forms","push to production",
+      "monitor logs","create a backup","review Core Web Vitals","ship the changes"
+    ];
+
+    const vocabTech = [
+      "repository","staging","rollback","deploy","schema","endpoint","payload","throttle","latency","bandwidth",
+      "optimize","cache","invalidate","reflow","responsive","accessibility","semantic","minify","bundle","hydrate",
+      "webhook","runtime","versioning","naming","deprecate","backward compatible","idempotent","isomorphic","scaffold","middleware",
+      "pipeline","orchestration","container","monitoring","observability","telemetry","throughput","concurrency","memoization","debounce",
+      "throttling","snapshot","checksum","signature","sandbox","permissions","namespace","token","secret","rate limit"
+    ];
+    const vocabWP = [
+      "permalink","slug","child theme","template","hook","filter","shortcode","customizer","block editor","taxonomy",
+      "custom post type","widget","enqueue","nonce","multisite","htaccess","cron","transient","query loop","action",
+      "page builder","theme.json","functions.php","wp-config","media library","favicon","sitemap","breadcrumb","robots.txt","CDN",
+      "lazy loading","critical CSS","CLS","LCP","TTFB","FCP","webp","sitemap index","redirect","canonical",
+      "breadcrumbs","sticky header","off canvas","mega menu","hero section","CTA","opt in","lightbox","preload","prefetch"
+    ];
+    const vocabMarketing = [
+      "value proposition","unique mechanism","lead magnet","funnel","tripwire","retargeting","remarketing","segmentation","positioning","differentiation",
+      "lifetime value","acquisition","activation","retention","referral","conversion","attribution","persona","awareness","consideration",
+      "copywriting","hook","cold open","call to action","social proof","testimonials","case study","cohort","benchmark","uplift",
+      "split test","confidence interval","statistically significant","organic","paid","reach","impressions","click through rate","watch time","retention"
+    ];
+    const vocabSpeaking = [
+      "coherent","concise","articulate","intonation","stress pattern","rhythm","cadence","enunciate","pause","hesitation",
+      "paraphrase","rephrase","clarify","summarize","elaborate","contrast","emphasize","concede","counterpoint","segue",
+      "rhetoric","analogy","assertion","premise","evidence","implication","nuance","hedge","stance","takeaway"
+    ];
+
+    const shadowing = {
+      1:"Choose a clear American tech explainer, 60 to 90 seconds, and shadow it with chorus then echo.",
+      2:"Pick a product demo by a US creator and focus on linking and reductions while shadowing.",
+      3:"Shadow a Q and A clip and copy the melody of short answers and follow ups.",
+      4:"Shadow a polished tutorial intro and copy the hook, the pace, and the micro pauses."
+    }
+
+    const drills = [
+      "Record a 90 second one take explaining what you did today.",
+      "Do the 3 2 1 compression on the same topic and keep it coherent.",
+      "Answer three why questions about today’s task using the PREP structure.",
+      "Teach the concept to a beginner in 60 seconds and then to a senior in 60 seconds.",
+      "Record a cold open with hook, what, and why in 20 seconds.",
+      "Deliver a five step explainer with a recap and a call to action.",
+      "Run a Q and A hot seat with five quick prompts, 30 to 45 seconds each."
+    ];
+
+    const antiFiller = [
+      "Land a sentence, pause silently for half a second, then start the next idea.",
+      "Replace um and uh with a short breath and a reset phrase such as Right or Now.",
+      "Keep sentences short and avoid stacking three prepositional phrases.",
+      "Use a hand cue to pause whenever you feel a filler coming.",
+      "Preload the first sentence before you hit record.",
+      "Drop your speed by ten percent and keep articulation crisp.",
+      "Chunk ideas into four to seven word thought groups."
+    ];
+
+    const phraseModes = ["hook","plan","transition","clarify","teach","debug","perf","cta","wrap","next"];
+
+    // ---------- Helpers ----------
+    function cyclePick(arr, idx) { return arr[idx % arr.length]; }
+    function weekFromDay(day){ return Math.min(4, Math.floor((day-1)/7)+1); }
+
+    function defFor(term){
+      const map = {
+        "repository":"code storage with history","staging":"safe testing environment","rollback":"revert to a previous version",
+        "deploy":"publish a build to live","schema":"structured data blueprint","endpoint":"URL that accepts or returns data",
+        "payload":"data sent in a request","latency":"delay before a transfer begins","bandwidth":"maximum data transfer rate",
+        "optimize":"improve speed or efficiency","cache":"stored data for faster access","invalidate":"clear outdated cached data",
+        "responsive":"adapts to different screens","accessibility":"usable by all people","semantic":"meaningful markup for clarity",
+        "minify":"remove unnecessary characters","bundle":"combine files for delivery","hydrate":"attach interactivity to markup",
+        "webhook":"server to server callback","runtime":"environment where code executes","permalink":"permanent page URL",
+        "slug":"URL friendly name","child theme":"inheriting theme with overrides","hook":"trigger point for custom code",
+        "filter":"function that modifies data","shortcode":"macro that renders content","taxonomy":"way to group content",
+        "nonce":"security token to validate actions","transient":"temporary cached value","lead magnet":"free resource to capture emails",
+        "funnel":"guided steps toward a goal","retargeting":"ads shown to past visitors","positioning":"how the offer is perceived",
+        "lifetime value":"revenue over a customer life","activation":"first successful value moment","retention":"customers who keep using",
+        "conversion":"desired action taken","coherent":"logically connected and consistent","concise":"clear and brief",
+        "articulate":"express ideas clearly","intonation":"rise and fall of pitch","segue":"smooth transition between topics",
+        "takeaway":"key point to remember"
+      };
+      return map[term] || "brief, practical definition";
+    }
+
+    function vocabExample(term){
+      return `In this tutorial I use the term "${term}" and show how it fits into a real WordPress project.`;
+    }
+
+    function phraseLine(dev, step, mode){
+      switch(mode){
+        case "hook": return `Quick heads up, today I am ${dev} and I will ${step} so you can follow along with confidence.`;
+        case "plan": return `The plan for today is simple, we will ${step} and then apply it to ${dev}.`;
+        case "transition": return `With that in mind, let us ${step} to keep ${dev} on track.`;
+        case "clarify": return `Just to be clear, you should ${step} before you start ${dev} on a live site.`;
+        case "teach": return `Here is the intuition, when you ${step} the core of ${dev} becomes easier to maintain.`;
+        case "debug": return `If you hit an error, ${step} again and compare logs so ${dev} keeps working.`;
+        case "perf": return `From a performance point of view, we will ${step} and measure the impact on ${dev}.`;
+        case "cta": return `My recommendation is to ${step} right now and then continue ${dev} with me.`;
+        case "wrap": return `To recap, we managed to ${step} and the main ${dev} task is complete.`;
+        default: return `Next up, we will ${step} and then continue ${dev} without rushing.`;
+      }
+    }
+
+    // Build 30 chapters deterministically
+    const vocabPool = [...new Set([...vocabTech, ...vocabWP, ...vocabMarketing, ...vocabSpeaking])];
+
+    function buildDay(day){
+      const titleBank = [
+        "Reset and Clarity","Chunking and Breath","Linking and Reductions","Word Stress and Rhythm","Final Consonants and R",
+        "Compression Drill Day","From Script to Bullet Points","Cold Open Practice","Q and A Melody","Clarity Under Speed",
+        "Camera Comfort","Developer Collocations","Marketing Collocations","Podcast Host Energy","Repair and Paraphrase",
+        "Contrast and Emphasis","American Flap T","Filler Free Flow","Story Braid Practice","Explain to a Client",
+        "Micro Pauses on Camera","One Take Tutorials","Metrics Mindset","Retain and Recall","Live Q and A Prep",
+        "Hook to Recap Loop","Multi Topic Switching","Exam Polish Day","Mini Tutorial Day","Final Showcase"
+      ];
+      const title = titleBank[day-1];
+      const week = weekFromDay(day);
+
+      // Twisters: pick 3 from rotating list
+      const t = [ cyclePick(twisters, day-1), cyclePick(twisters, day+6), cyclePick(twisters, day+13) ];
+
+      // Vocab: 20 rolling unique-ish picks
+      const vocab = Array.from({length:20}, (_,i) => cyclePick(vocabPool, (day-1)*23 + i));
+
+      // Phrases: 20 camera-ready lines
+      const phrases = Array.from({length:20}, (_,i) => {
+        const dev = cyclePick(devTopics, (day-1)+i);
+        const step = cyclePick(steps, (day-1)*2 + i);
+        const mode = cyclePick(phraseModes, i+day);
+        return phraseLine(dev, step, mode);
+      });
+
+      const schedule = [
+        "Warm up for five minutes with lip trills, hum, and slow vowels.",
+        "Tongue twisters for five minutes at 80, 100, and 120 bpm.",
+        "Shadowing for ten minutes using the weekly focus.",
+        "Vocabulary for eight to ten minutes; read, say, and use each item.",
+        "Phrase pack for eight to ten minutes, then deliver the production drill.",
+        "Review and log metrics for two minutes."
+      ];
+
+      return {
+        day, title, week,
+        twisters: t,
+        vocabulary: vocab.map(v => ({ term: v, def: defFor(v), ex: vocabExample(v) })),
+        phrases,
+        shadow: shadowing[week],
+        drill: cyclePick(drills, day-1),
+        anti: cyclePick(antiFiller, day-1),
+        schedule
+      };
+    }
+
+    const DAYS = Array.from({length:30}, (_,i)=>buildDay(i+1));
+
+    // ---------- State & UI ----------
+    const elTOC = document.getElementById('toc');
+    const elMain = document.getElementById('main');
+    const elSearch = document.getElementById('search');
+    const elPB = document.getElementById('progressBar');
+    const elPL = document.getElementById('progressLabel');
+
+    const state = {
+      current: 1,
+      done: new Set(JSON.parse(localStorage.getItem('fs30_done')||'[]')),
+    };
+
+    function saveDone(){ localStorage.setItem('fs30_done', JSON.stringify([...state.done])); }
+
+    function updateProgress(){
+      const pct = Math.round((state.done.size/30)*100);
+      elPB.style.width = pct + '%';
+      elPL.textContent = pct + '%';
+    }
+
+    function renderTOC(filter=''){
+      elTOC.innerHTML = '';
+      DAYS.forEach(d => {
+        const text = `Chapter ${d.day} — ${d.title}`.toLowerCase();
+        const hay = [text, ...d.twisters, ...d.phrases, ...d.vocabulary.map(v=>v.term)].join(' ').toLowerCase();
+        if(filter && !hay.includes(filter.toLowerCase())) return;
+        const li = document.createElement('li');
+        const a = document.createElement('a'); a.href = `#day-${d.day}`; a.textContent = `Chapter ${d.day}: ${d.title}`;
+        a.addEventListener('click', (e)=>{ e.preventDefault(); openDay(d.day); });
+        const span = document.createElement('span'); span.className = 'state ' + (state.done.has(d.day) ? 'done' : '');
+        span.textContent = state.done.has(d.day) ? 'Done' : 'Not yet';
+        li.appendChild(a); li.appendChild(span); elTOC.appendChild(li);
+      });
+    }
+
+    function section(title, html){
+      return `<section class="card"><h2>${title}</h2>${html}</section>`;
+    }
+
+    function list(items){ return `<ul class="clean">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`; }
+
+    function renderDay(d){
+      const top = `
+        <section id="day-${d.day}" class="card">
+          <div style="display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div>
+              <h2 style="margin:0;">Chapter ${d.day}: ${d.title}</h2>
+              <div class="muted small">Weekly shadowing theme: ${d.shadow}</div>
+            </div>
+            <div class="controls">
+              <button class="btn-primary" id="markDone">${state.done.has(d.day) ? 'Mark as Not Done' : 'Mark as Done'}</button>
+              <button class="btn" id="copyPhrases">Copy Phrases</button>
+              <button class="btn" id="ttsPhrases">Read Phrases</button>
+            </div>
+          </div>
+        </section>`;
+
+      const sched = section('Daily schedule', list(d.schedule));
+      const tw = section('Tongue twisters (clarity, speed, confidence)', list(d.twisters));
+      const voc = section('Vocabulary (20) — definition and an example sentence', list(d.vocabulary.map(v=>`<strong>${v.term}</strong> — ${v.def}. <em>${v.ex}</em>`)));
+      const phr = section('Phrase pack (20) — camera ready lines for today', list(d.phrases));
+      const bottom = `
+        <div class="grid-2">
+          ${section('Production drill', `<p>${d.drill}</p>`)}
+          ${section('Anti filler focus', `<p>${d.anti}</p>`)}
+        </div>
+        ${section('Metrics to track', list(['Words per minute','Fillers per minute','One fix for tomorrow']))}
+      `;
+
+      elMain.innerHTML = top + sched + tw + voc + phr + bottom;
+
+      // Wire buttons
+      document.getElementById('markDone').onclick = ()=>{
+        if(state.done.has(d.day)) state.done.delete(d.day); else state.done.add(d.day);
+        saveDone(); updateProgress(); renderTOC(elSearch.value.trim()); openDay(d.day);
+      };
+
+      document.getElementById('copyPhrases').onclick = ()=>{
+        navigator.clipboard.writeText(d.phrases.join('\n')).then(()=>{
+          toast('Phrases copied');
+        });
+      };
+
+      document.getElementById('ttsPhrases').onclick = ()=>{
+        if(!('speechSynthesis' in window)) return toast('Speech not supported');
+        const synth = window.speechSynthesis; synth.cancel();
+        const chunk = d.phrases.join('. ');
+        const u = new SpeechSynthesisUtterance(chunk);
+        u.rate = 1.02; u.pitch = 1.0; u.lang = 'en-US';
+        synth.speak(u);
+      };
+    }
+
+    function openDay(n){ state.current = n; renderDay(DAYS[n-1]); location.hash = `#day-${n}`; }
+
+    // Toast
+    let toastEl; function toast(msg){
+      if(!toastEl){ toastEl = document.createElement('div'); document.body.appendChild(toastEl); }
+      toastEl.textContent = msg; toastEl.style.cssText = `position:fixed; left:50%; transform:translateX(-50%); bottom:20px; background:rgba(0,0,0,.7); color:white; padding:8px 12px; border-radius:12px; z-index:9999;`;
+      setTimeout(()=>toastEl.remove(), 1400);
+    }
+
+    // Search
+    elSearch.addEventListener('input', e => { renderTOC(e.target.value.trim()); });
+
+    // Progress and TOC
+    updateProgress(); renderTOC('');
+
+    // Routing
+    const hash = location.hash.match(/day-(\d+)/); const start = hash? parseInt(hash[1],10) : 1; openDay(start);
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if(e.key==='j'){ if(state.current<30) openDay(state.current+1); }
+      if(e.key==='k'){ if(state.current>1) openDay(state.current-1); }
+      if(e.key==='d'){ document.getElementById('markDone')?.click(); }
+    });
+
+    // Mobile nav toggle
+    const toggleBtn = document.getElementById('toggleNav');
+    toggleBtn.addEventListener('click', ()=>{
+      const sb = document.getElementById('sidebar');
+      const open = sb.style.display !== 'none';
+      if(open && window.innerWidth < 980){ sb.style.display = 'none'; toggleBtn.setAttribute('aria-expanded','false'); }
+      else { sb.style.display = ''; toggleBtn.setAttribute('aria-expanded','true'); }
+    });
+
+    // Print
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+  </script>
+</body>
+</html>
