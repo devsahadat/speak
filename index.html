@@ -5,22 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Fluency Sprint 30 — WordPress YouTuber</title>
   <meta name="description" content="30-day speaking fluency sprint for a WordPress developer YouTuber: daily tongue twisters, vocabulary, phrase packs, drills."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ------- CSS Reset (light) ------- */
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height: 1.55; letter-spacing: 0.2px; }
+    body { margin: 0; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif; line-height: 1.55; letter-spacing: 0.2px; }
     img, svg, video { display: block; max-width: 100%; }
 
     :root {
-      --bg: #0b0f1a;                 /* deep navy */
-      --bg2: #101729;                /* dark blue */
+      /* Dark Mode - Based on HSL = 245-35-7 to 245-55-50 */
+      --bg: hsl(245, 35%, 7%);        /* Darkest BG - HSL = 245-35-7 */
+      --bg2: hsl(245, 25%, 14%);      /* Darker BG - HSL = 245-25-14 */
       --glass: rgba(255,255,255,0.08);
       --card: rgba(255,255,255,0.10);
       --stroke: rgba(255,255,255,0.18);
-      --text: #ffffff;               /* pure white for 21:1 contrast */
-      --muted: #d4dce8;              /* lighter gray for 11:1 contrast */
-      --brand: #3A26C0;              /* AuthLab accent */
+      --text: hsl(0, 0%, 90%);      /* Strongest Text - HSL = 245-4-97 */
+      --text-strong: hsl(0, 0%, 90%); /* Strong text - HSL = 245-7-95 */
+      --text-medium: hsl(0, 0%, 90%); /* Medium Text - HSL = 245-10-90 */
+      --muted: hsl(245, 10%, 49%);    /* Subtle Text/Border - HSL = 245-10-49 */
+      --subtle-bg: hsl(245, 15%, 21%); /* Subtle BG - HSL = 245-15-21 */
+      --brand: hsl(245, 55%, 50%);    /* Accent - HSL = 245-55-50 */
+      --brand-alt: hsl(245, 45%, 40%); /* Accent Alt - HSL = 245-45-40 */
       --accent: #25d0ff;             /* cyan */
       --ok: #21d17c;                 /* green */
       --warn: #ffb020;               /* amber */
@@ -29,90 +37,178 @@
       --shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
     }
 
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f7f8fc; --bg2: #eef1fb; --glass: rgba(255,255,255,0.65); --card: rgba(255,255,255,0.75);
-        --stroke: rgba(12,16,40,0.08); --text: #000000; --muted: #2c3e50; --accent: #0052cc;
-      }
-      body { color: var(--text); }
+    :root[data-theme="light"] {
+      /* Light Mode - Based on HSL = 245-4-97 to 245-55-50 */
+      --bg: hsl(245, 4%, 97%);        /* White BG - HSL = 245-4-97 */
+      --bg2: hsl(245, 7%, 95%);       /* Lighter BG - HSL = 245-7-95 */
+      --glass: rgba(0,0,0,0.02);
+      --card: rgba(255,255,255,0.80);
+      --stroke: hsl(245, 10%, 90%);   /* HSL = 245-10-90 */
+      --text: hsl(245, 55%, 7%);      /* Strongest Text - HSL = 245-55-7 (inverted) */
+      --text-strong: hsl(245, 45%, 14%); /* Strong text */
+      --text-medium: hsl(245, 35%, 21%); /* Medium Text - HSL = 245-35-21 */
+      --muted: hsl(245, 10%, 49%);    /* Subtle Text/Border - HSL = 245-10-49 */
+      --subtle-bg: hsl(245, 10%, 90%); /* Subtle BG - HSL = 245-10-90 */
+      --brand: hsl(245, 55%, 50%);    /* Accent - HSL = 245-55-50 */
+      --brand-alt: hsl(245, 45%, 40%); /* Accent Alt - HSL = 245-45-40 */
+      --accent: #0052cc;
+      --ok: #21d17c;
+      --warn: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 4px 12px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5);
     }
 
     /* ------- Background ------- */
     .bg {
       position: fixed; inset: 0; z-index: -1;
       background:
-        radial-gradient(1200px 600px at 20% -10%, rgba(58,38,192,.35), transparent 60%),
-        radial-gradient(900px 500px at 90% 10%, rgba(37,208,255,.25), transparent 60%),
+        radial-gradient(1200px 600px at 20% -10%, hsla(245, 55%, 50%, 0.2), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, hsla(245, 45%, 40%, 0.15), transparent 60%),
         linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
       filter: saturate(1.1);
+      transition: background 0.3s ease;
+    }
+
+    :root[data-theme="light"] .bg {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, hsla(245, 55%, 70%, 0.15), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, hsla(245, 45%, 60%, 0.1), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
     }
 
     /* ------- Layout ------- */
+    body { color: var(--text); transition: background-color 0.3s ease, color 0.3s ease; }
+    
     header {
       position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(1.4) blur(10px);
       background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0)) ;
       border-bottom: 1px solid var(--stroke);
     }
-    .wrap { display: grid; grid-template-columns: 280px 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 18px; }
-    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } }
+    
+    :root[data-theme="light"] header {
+      background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,0));
+    }
+    .wrap { display: grid; grid-template-columns: 300px 1fr; gap: 24px; max-width: 1280px; margin: 0 auto; padding: 24px; }
+    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; padding: 16px; } }
 
-    .brandbar { display:flex; align-items:center; gap:14px; padding: 14px 18px; }
+    .brandbar { display:flex; align-items:center; gap:16px; padding: 16px 20px; flex-wrap: wrap; }
     .logo {
-      width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--brand), var(--accent));
+      width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--brand), var(--accent));
       box-shadow: var(--shadow);
     }
-    .title { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: .4px; }
-    .muted { color: var(--muted); font-size: 13px; }
+    .title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 2px; }
+    .muted { color: var(--muted); font-size: 16px; font-weight: 400; line-height: 1.5; }
+    
+    @media (max-width: 640px) {
+      .brandbar { gap: 12px; padding: 12px 16px; }
+      .logo { width: 36px; height: 36px; }
+      .title { font-size: 18px; }
+      .muted { font-size: 14px; }
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      width: 50px; height: 26px; border-radius: 999px; border: 1px solid var(--stroke);
+      background: var(--subtle-bg); cursor: pointer; position: relative; transition: all 0.3s ease;
+    }
+    .theme-toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+      border-radius: 50%; background: var(--brand); transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    :root[data-theme="light"] .theme-toggle::after {
+      left: calc(100% - 22px);
+    }
+    
+    .header-controls {
+      margin-left: auto; display: flex; gap: 8px; align-items: center;
+    }
+    
+    @media (max-width: 640px) {
+      .header-controls {
+        width: 100%; margin-left: 0; justify-content: flex-end; gap: 6px;
+      }
+    }
 
     /* ------- Sidebar ------- */
     nav.sidebar {
       position: sticky; top: 68px; align-self: start; border-radius: var(--radius);
       background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px) saturate(1.4);
       box-shadow: var(--shadow);
-      padding: 14px; max-height: calc(100dvh - 88px); overflow: auto;
+      padding: 18px; max-height: calc(100dvh - 88px); overflow: auto;
     }
     .progress {
-      height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow:hidden; margin: 10px 0 12px;
+      height: 8px; border-radius: 999px; background: var(--subtle-bg); overflow:hidden; margin: 12px 0 16px;
     }
-    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--accent)); transition: width .3s ease; }
-    .toc { list-style:none; padding:0; margin:0; display:grid; gap:6px; }
+    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--brand), var(--brand-alt)); transition: width .3s ease; }
+    .toc { list-style:none; padding:0; margin:0; display:grid; gap:4px; }
     .toc li { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .toc a { display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; text-decoration:none; color:var(--text);
-             background: transparent; border:1px solid transparent; transition: .2s ease; flex:1; }
+    .toc a { display:flex; gap:10px; align-items:center; padding:12px 14px; border-radius:12px; text-decoration:none; color:var(--text);
+             background: transparent; border:1px solid transparent; transition: .2s ease; flex:1; font-size: 16px; font-weight: 400; line-height: 1.5; }
     .toc a:hover { border-color: var(--stroke); background: var(--card); }
-    .toc .state { font-size: 11px; color: var(--muted); }
+    .toc .state { font-size: 13px; font-weight: 400; color: var(--muted); }
     .toc .done { color: var(--ok); }
 
-    .search { display:flex; gap:8px; margin: 6px 0 10px; }
+    .search { display:flex; gap:8px; margin: 8px 0 16px; }
     .input {
-      width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke); background: var(--card);
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--stroke); background: var(--card);
       color: var(--text); outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      font-size: 16px; font-weight: 400; line-height: 1.5;
     }
 
     /* ------- Main ------- */
-    main { display:grid; gap: 18px; }
+    main { display:grid; gap: 24px; }
     .card {
       background: var(--glass); border: 1px solid var(--stroke); border-radius: var(--radius);
-      backdrop-filter: blur(18px) saturate(1.4); box-shadow: var(--shadow); padding: 18px;
+      backdrop-filter: blur(18px) saturate(1.4); box-shadow: var(--shadow); padding: 24px;
     }
-    .card h2 { margin:0 0 8px; font-size: 24px; letter-spacing:.3px; }
-    .card h3 { margin:10px 0 6px; font-size: 16px; color: var(--muted); }
-    .pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); font-size:12px; }
-    .controls { display:flex; gap:8px; flex-wrap:wrap; }
+    .card h2 { margin:0 0 12px; font-size: 31px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; color: var(--text); }
+    .card h3 { margin:24px 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; color: var(--text-medium); }
+    .card h3:first-of-type { margin-top: 0; }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; border:1px solid var(--stroke); background: var(--subtle-bg); font-size:13px; font-weight: 400; line-height: 1.5; color: var(--text-medium); }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px; }
     button, .btn {
-      appearance:none; border:1px solid var(--stroke); background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-      color: var(--text); border-radius: 12px; padding:8px 12px; font-weight:600; cursor:pointer; box-shadow: var(--shadow);
+      appearance:none; border:1px solid var(--stroke); background: var(--subtle-bg);
+      color: var(--text); border-radius: 12px; padding:12px 20px; font-weight:600; font-size: 16px; 
+      line-height: 1.5; cursor:pointer; box-shadow: var(--shadow); transition: all 0.2s ease;
     }
-    button:hover { filter: brightness(1.05); }
-    .btn-primary { border-color: transparent; background: linear-gradient(135deg, var(--brand), var(--accent)); color: white; }
+    button:hover { filter: brightness(1.1); }
+    .btn-primary { border-color: transparent; background: linear-gradient(135deg, var(--brand), var(--brand-alt)); color: #ffffff; font-weight: 600; }
+    
+    @media (max-width: 640px) {
+      button, .btn { padding: 10px 16px; font-size: 14px; }
+    }
 
-    ul.clean { padding-left: 1.2rem; margin: .2rem 0 .6rem; }
-    ul.clean li { margin: .2rem 0; }
-    .grid-2 { display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
+    ul.clean { padding-left: 1.5rem; margin: 16px 0; font-size: 18px; font-weight: 400; line-height: 1.7; }
+    ul.clean li { margin: 10px 0; padding-left: 4px; }
+    .grid-2 { display:grid; gap:16px; grid-template-columns: 1fr 1fr; }
     @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
 
     .ghost { opacity:.75 }
-    .small { font-size: 12px; }
+    .small { font-size: 13px; font-weight: 400; line-height: 1.5; }
+
+    /* Card content paragraphs */
+    .card p { font-size: 18px; font-weight: 400; line-height: 1.7; margin: 12px 0; }
+    .card strong { font-weight: 700; }
+    .card em { font-style: italic; font-weight: 400; }
+    
+    /* Phrase highlighting */
+    .phrase-item {
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+    }
+    .phrase-item.reading {
+      background: linear-gradient(135deg, var(--brand), var(--brand-alt));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: scale(1.02);
+    }
+    .phrase-item.reading strong,
+    .phrase-item.reading em {
+      color: #ffffff;
+    }
 
     /* Print friendly */
     @media print {
@@ -135,7 +231,8 @@
         <div class="title">Fluency Sprint 30</div>
         <div class="muted">WordPress developer • tutorials • marketing • podcast</div>
       </div>
-      <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+      <div class="header-controls">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode"></button>
         <button id="toggleNav" class="btn" aria-expanded="false" aria-controls="sidebar">Menu</button>
         <button id="printBtn" class="btn">Print Chapter</button>
       </div>
@@ -374,9 +471,28 @@
     const state = {
       current: 1,
       done: new Set(JSON.parse(localStorage.getItem('fs30_done')||'[]')),
+      isReading: false,
+      currentPhraseIndex: -1,
     };
 
     function saveDone(){ localStorage.setItem('fs30_done', JSON.stringify([...state.done])); }
+
+    // Theme Management
+    function initTheme(){
+      const saved = localStorage.getItem('fs30_theme');
+      const theme = saved || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function toggleTheme(){
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fs30_theme', next);
+    }
+
+    // Initialize theme on load
+    initTheme();
 
     function updateProgress(){
       const pct = Math.round((state.done.size/30)*100);
@@ -404,6 +520,12 @@
     }
 
     function list(items){ return `<ul class="clean">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`; }
+    
+    function phraseList(items){ 
+      return `<ul class="clean">${items.map((phrase, idx) => 
+        `<li class="phrase-item" data-phrase-index="${idx}">${phrase}</li>`
+      ).join('')}</ul>`;
+    }
 
     function renderDay(d){
       const top = `
@@ -424,7 +546,7 @@
       const sched = section('Daily schedule', list(d.schedule));
       const tw = section('Tongue twisters (clarity, speed, confidence)', list(d.twisters));
       const voc = section('Vocabulary (20) — definition and an example sentence', list(d.vocabulary.map(v=>`<strong>${v.term}</strong> — ${v.def}. <em>${v.ex}</em>`)));
-      const phr = section('Phrase pack (20) — camera ready lines for today', list(d.phrases));
+      const phr = section('Phrase pack (20) — camera ready lines for today', phraseList(d.phrases));
       const bottom = `
         <div class="grid-2">
           ${section('Production drill', `<p>${d.drill}</p>`)}
@@ -449,15 +571,97 @@
 
       document.getElementById('ttsPhrases').onclick = ()=>{
         if(!('speechSynthesis' in window)) return toast('Speech not supported');
-        const synth = window.speechSynthesis; synth.cancel();
-        const chunk = d.phrases.join('. ');
-        const u = new SpeechSynthesisUtterance(chunk);
-        u.rate = 1.02; u.pitch = 1.0; u.lang = 'en-US';
-        synth.speak(u);
+        const synth = window.speechSynthesis;
+        const btn = document.getElementById('ttsPhrases');
+        
+        if(state.isReading){
+          // Stop reading
+          synth.cancel();
+          state.isReading = false;
+          state.currentPhraseIndex = -1;
+          btn.textContent = 'Read Phrases';
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn');
+          // Remove all highlights
+          document.querySelectorAll('.phrase-item.reading').forEach(el => {
+            el.classList.remove('reading');
+          });
+        } else {
+          // Start reading
+          synth.cancel(); // Clear any previous
+          state.isReading = true;
+          state.currentPhraseIndex = 0;
+          
+          // Function to read one phrase at a time
+          const readPhrase = (index) => {
+            if (index >= d.phrases.length) {
+              // Done reading all phrases
+              state.isReading = false;
+              state.currentPhraseIndex = -1;
+              btn.textContent = 'Read Phrases';
+              btn.classList.remove('btn-primary');
+              btn.classList.add('btn');
+              return;
+            }
+            
+            // Remove previous highlight
+            document.querySelectorAll('.phrase-item.reading').forEach(el => {
+              el.classList.remove('reading');
+            });
+            
+            // Highlight current phrase
+            const currentPhrase = document.querySelector(`[data-phrase-index="${index}"]`);
+            if (currentPhrase) {
+              currentPhrase.classList.add('reading');
+              // Scroll to the phrase with smooth behavior
+              currentPhrase.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            const u = new SpeechSynthesisUtterance(d.phrases[index]);
+            u.rate = 1.02; u.pitch = 1.0; u.lang = 'en-US';
+            
+            u.onend = () => {
+              if (state.isReading) {
+                state.currentPhraseIndex++;
+                setTimeout(() => readPhrase(state.currentPhraseIndex), 300);
+              }
+            };
+            
+            u.onerror = () => {
+              state.isReading = false;
+              state.currentPhraseIndex = -1;
+              btn.textContent = 'Read Phrases';
+              btn.classList.remove('btn-primary');
+              btn.classList.add('btn');
+              document.querySelectorAll('.phrase-item.reading').forEach(el => {
+                el.classList.remove('reading');
+              });
+            };
+            
+            synth.speak(u);
+          };
+          
+          btn.textContent = 'Stop Reading';
+          btn.classList.remove('btn');
+          btn.classList.add('btn-primary');
+          
+          // Start reading from first phrase
+          readPhrase(0);
+        }
       };
     }
 
-    function openDay(n){ state.current = n; renderDay(DAYS[n-1]); location.hash = `#day-${n}`; }
+    function openDay(n){ 
+      // Stop any ongoing speech when changing chapters
+      if('speechSynthesis' in window && state.isReading){
+        window.speechSynthesis.cancel();
+        state.isReading = false;
+        state.currentPhraseIndex = -1;
+      }
+      state.current = n; 
+      renderDay(DAYS[n-1]); 
+      location.hash = `#day-${n}`; 
+    }
 
     // Toast
     let toastEl; function toast(msg){
@@ -494,6 +698,9 @@
 
     // Print
     document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
   </script>
 </body>
 </html>
