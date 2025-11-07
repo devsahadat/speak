@@ -67,6 +67,7 @@
         linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
       filter: saturate(1.1);
       transition: background 0.3s ease;
+      pointer-events: none;
     }
 
     :root[data-theme="light"] .bg {
@@ -77,10 +78,16 @@
     }
 
     /* ------- Layout ------- */
-    body { color: var(--text); transition: background-color 0.3s ease, color 0.3s ease; }
+    body { 
+      color: var(--text); 
+      transition: background-color 0.3s ease, color 0.3s ease; 
+      background: var(--bg);
+      position: relative;
+      min-height: 100vh;
+    }
     
     header {
-      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(1.4) blur(10px);
+      position: sticky; top: 0; z-index: 100; backdrop-filter: saturate(1.4) blur(10px);
       background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0)) ;
       border-bottom: 1px solid var(--stroke);
     }
@@ -88,7 +95,7 @@
     :root[data-theme="light"] header {
       background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,0));
     }
-    .wrap { display: grid; grid-template-columns: 300px 1fr; gap: 24px; max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .wrap { display: grid; grid-template-columns: 300px 1fr; gap: 24px; max-width: 1280px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; }
     @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; padding: 16px; } }
 
     .brandbar { display:flex; align-items:center; gap:16px; padding: 16px 20px; flex-wrap: wrap; }
@@ -136,6 +143,7 @@
       background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px) saturate(1.4);
       box-shadow: var(--shadow);
       padding: 18px; max-height: calc(100dvh - 88px); overflow: auto;
+      z-index: 10;
     }
     .progress {
       height: 8px; border-radius: 999px; background: var(--subtle-bg); overflow:hidden; margin: 12px 0 16px;
@@ -157,10 +165,11 @@
     }
 
     /* ------- Main ------- */
-    main { display:grid; gap: 24px; }
+    main { display:grid; gap: 24px; position: relative; z-index: 1; }
     .card {
       background: var(--glass); border: 1px solid var(--stroke); border-radius: var(--radius);
       backdrop-filter: blur(18px) saturate(1.4); box-shadow: var(--shadow); padding: 24px;
+      position: relative; z-index: 1;
     }
     .card h2 { margin:0 0 12px; font-size: 31px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; color: var(--text); }
     .card h3 { margin:24px 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; color: var(--text-medium); }
@@ -195,19 +204,74 @@
     /* Phrase highlighting */
     .phrase-item {
       transition: all 0.3s ease;
-      padding: 8px 12px;
-      margin: 6px 0;
-      border-radius: 8px;
+      padding: 12px 16px;
+      padding-right: 80px;
+      margin: 8px 0;
+      border-radius: 10px;
+      position: relative;
+      background: transparent;
+      border: 1px solid transparent;
+    }
+    .phrase-item:hover {
+      border-color: var(--stroke);
+      background: var(--card);
     }
     .phrase-item.reading {
       background: linear-gradient(135deg, var(--brand), var(--brand-alt));
       color: #ffffff;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transform: scale(1.02);
+      border-color: transparent;
     }
     .phrase-item.reading strong,
     .phrase-item.reading em {
       color: #ffffff;
+    }
+    .phrase-item .phrase-text {
+      display: block;
+      padding-right: 8px;
+    }
+    .phrase-item .phrase-control-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--subtle-bg);
+      color: var(--text);
+      border: 1px solid var(--stroke);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .phrase-item .phrase-control-btn:hover {
+      transform: translateY(-50%) scale(1.05);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .phrase-item.reading .phrase-control-btn {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--brand);
+      border-color: transparent;
+    }
+    .phrase-item.reading .phrase-control-btn:hover {
+      background: #ffffff;
+    }
+    
+    @media (max-width: 640px) {
+      .phrase-item {
+        padding: 10px 12px;
+        padding-right: 70px;
+        font-size: 16px;
+      }
+      .phrase-item .phrase-control-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+        right: 8px;
+      }
     }
 
     /* Print friendly */
@@ -473,6 +537,7 @@
       done: new Set(JSON.parse(localStorage.getItem('fs30_done')||'[]')),
       isReading: false,
       currentPhraseIndex: -1,
+      currentUtterance: null,
     };
 
     function saveDone(){ localStorage.setItem('fs30_done', JSON.stringify([...state.done])); }
@@ -493,6 +558,101 @@
 
     // Initialize theme on load
     initTheme();
+
+    // Global toggle phrase reading function
+    window.togglePhraseReading = function(index, btnElement) {
+      if(!('speechSynthesis' in window)) return toast('Speech not supported');
+      
+      const synth = window.speechSynthesis;
+      const phraseItem = document.querySelector(`[data-phrase-index="${index}"]`);
+      const currentDay = DAYS[state.current - 1];
+      
+      // If this phrase is already reading, stop it
+      if(state.isReading && state.currentPhraseIndex === index) {
+        synth.cancel();
+        state.isReading = false;
+        state.currentPhraseIndex = -1;
+        state.currentUtterance = null;
+        
+        phraseItem.classList.remove('reading');
+        btnElement.textContent = 'Read';
+        return;
+      }
+      
+      // If another phrase is reading, stop it first
+      if(state.isReading) {
+        synth.cancel();
+        const prevPhrase = document.querySelector(`[data-phrase-index="${state.currentPhraseIndex}"]`);
+        const prevBtn = document.querySelector(`[data-phrase-btn="${state.currentPhraseIndex}"]`);
+        if(prevPhrase) prevPhrase.classList.remove('reading');
+        if(prevBtn) prevBtn.textContent = 'Read';
+      }
+      
+      // Start reading this phrase
+      state.isReading = true;
+      state.currentPhraseIndex = index;
+      
+      phraseItem.classList.add('reading');
+      btnElement.textContent = 'Stop';
+      
+      // Scroll to phrase
+      phraseItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      const u = new SpeechSynthesisUtterance(currentDay.phrases[index]);
+      u.rate = 1.02;
+      u.pitch = 1.0;
+      u.lang = 'en-US';
+      state.currentUtterance = u;
+      
+      u.onend = () => {
+        state.isReading = false;
+        state.currentPhraseIndex = -1;
+        state.currentUtterance = null;
+        phraseItem.classList.remove('reading');
+        btnElement.textContent = 'Read';
+      };
+      
+      u.onerror = () => {
+        state.isReading = false;
+        state.currentPhraseIndex = -1;
+        state.currentUtterance = null;
+        phraseItem.classList.remove('reading');
+        btnElement.textContent = 'Read';
+      };
+      
+      synth.speak(u);
+    };
+
+    // Global stop reading function (for compatibility)
+    window.stopReading = function() {
+      if('speechSynthesis' in window){
+        window.speechSynthesis.cancel();
+        
+        if(state.currentPhraseIndex >= 0) {
+          const phraseItem = document.querySelector(`[data-phrase-index="${state.currentPhraseIndex}"]`);
+          const btn = document.querySelector(`[data-phrase-btn="${state.currentPhraseIndex}"]`);
+          if(phraseItem) phraseItem.classList.remove('reading');
+          if(btn) btn.textContent = 'Read';
+        }
+        
+        state.isReading = false;
+        state.currentPhraseIndex = -1;
+        state.currentUtterance = null;
+        
+        // Update main button if it exists
+        const btn = document.getElementById('ttsPhrases');
+        if(btn){
+          btn.textContent = 'Read Phrases';
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn');
+        }
+        
+        // Remove all highlights
+        document.querySelectorAll('.phrase-item.reading').forEach(el => {
+          el.classList.remove('reading');
+        });
+      }
+    };
 
     function updateProgress(){
       const pct = Math.round((state.done.size/30)*100);
@@ -523,7 +683,10 @@
     
     function phraseList(items){ 
       return `<ul class="clean">${items.map((phrase, idx) => 
-        `<li class="phrase-item" data-phrase-index="${idx}">${phrase}</li>`
+        `<li class="phrase-item" data-phrase-index="${idx}">
+          <span class="phrase-text">${phrase}</span>
+          <button class="phrase-control-btn" onclick="togglePhraseReading(${idx}, this)" data-phrase-btn="${idx}">Read</button>
+        </li>`
       ).join('')}</ul>`;
     }
 
@@ -576,31 +739,35 @@
         
         if(state.isReading){
           // Stop reading
-          synth.cancel();
-          state.isReading = false;
-          state.currentPhraseIndex = -1;
-          btn.textContent = 'Read Phrases';
-          btn.classList.remove('btn-primary');
-          btn.classList.add('btn');
-          // Remove all highlights
-          document.querySelectorAll('.phrase-item.reading').forEach(el => {
-            el.classList.remove('reading');
-          });
+          stopReading();
         } else {
-          // Start reading
-          synth.cancel(); // Clear any previous
+          // Start reading all phrases sequentially
+          synth.cancel();
           state.isReading = true;
           state.currentPhraseIndex = 0;
           
+          btn.textContent = 'Stop Reading';
+          btn.classList.remove('btn');
+          btn.classList.add('btn-primary');
+          
           // Function to read one phrase at a time
           const readPhrase = (index) => {
-            if (index >= d.phrases.length) {
+            if (index >= d.phrases.length || !state.isReading) {
               // Done reading all phrases
               state.isReading = false;
               state.currentPhraseIndex = -1;
+              state.currentUtterance = null;
               btn.textContent = 'Read Phrases';
               btn.classList.remove('btn-primary');
               btn.classList.add('btn');
+              
+              // Clean up any highlights
+              document.querySelectorAll('.phrase-item.reading').forEach(el => {
+                el.classList.remove('reading');
+              });
+              document.querySelectorAll('.phrase-control-btn').forEach(b => {
+                b.textContent = 'Read';
+              });
               return;
             }
             
@@ -608,17 +775,23 @@
             document.querySelectorAll('.phrase-item.reading').forEach(el => {
               el.classList.remove('reading');
             });
+            document.querySelectorAll('.phrase-control-btn').forEach(b => {
+              b.textContent = 'Read';
+            });
             
             // Highlight current phrase
             const currentPhrase = document.querySelector(`[data-phrase-index="${index}"]`);
+            const currentBtn = document.querySelector(`[data-phrase-btn="${index}"]`);
             if (currentPhrase) {
               currentPhrase.classList.add('reading');
+              if(currentBtn) currentBtn.textContent = 'Stop';
               // Scroll to the phrase with smooth behavior
               currentPhrase.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             
             const u = new SpeechSynthesisUtterance(d.phrases[index]);
             u.rate = 1.02; u.pitch = 1.0; u.lang = 'en-US';
+            state.currentUtterance = u;
             
             u.onend = () => {
               if (state.isReading) {
@@ -630,20 +803,20 @@
             u.onerror = () => {
               state.isReading = false;
               state.currentPhraseIndex = -1;
+              state.currentUtterance = null;
               btn.textContent = 'Read Phrases';
               btn.classList.remove('btn-primary');
               btn.classList.add('btn');
               document.querySelectorAll('.phrase-item.reading').forEach(el => {
                 el.classList.remove('reading');
               });
+              document.querySelectorAll('.phrase-control-btn').forEach(b => {
+                b.textContent = 'Read';
+              });
             };
             
             synth.speak(u);
           };
-          
-          btn.textContent = 'Stop Reading';
-          btn.classList.remove('btn');
-          btn.classList.add('btn-primary');
           
           // Start reading from first phrase
           readPhrase(0);
@@ -657,6 +830,7 @@
         window.speechSynthesis.cancel();
         state.isReading = false;
         state.currentPhraseIndex = -1;
+        state.currentUtterance = null;
       }
       state.current = n; 
       renderDay(DAYS[n-1]); 
